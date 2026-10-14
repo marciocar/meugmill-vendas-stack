@@ -104,6 +104,230 @@ nodes:
       locator: "superfície do framework presente e stamp carimbado"
       method: "leitura: na adoção"
       locality: "repo"
+  - id: D_BACK_OWN_MICROSERVICE
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Microsserviço próprio»"
+    label: "DECISÃO: o back novo da carteira é um microsserviço .NET 10 próprio, criado a partir do boilerplate GMill back (Core/Infra/Web), não um módulo do MeuGmillProdutoApi"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Microsserviço próprio»; descartadas: «Módulo no MeuGmillProdutoApi» · «Pesquisar antes»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Onde vai morar o back novo da carteira?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_FRONT_IN_VENDAS_FRONT
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Feature do Vendas Front»"
+    label: "DECISÃO: o front novo da carteira é feature do Vendas Front (MeuGmillProdutoFront), em pages/authenticated/carteiras; o custom element gmill-carteira deixa de existir"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Feature do Vendas Front»; descartadas: «SPA própria no padrão» · «Continua embarcável»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Onde vai morar o front novo da carteira?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_AUTH_VENDAS_TOKEN
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Token do Vendas»"
+    label: "DECISÃO: a API da carteira valida o JWT emitido pela API Vendas (após login-azure/login-basic) e mapeia perfis e filiais das claims dele"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Token do Vendas»; descartadas: «Entra ID direto» · «Manter OIDC genérico»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «De onde vem a identidade (token, perfis e filiais) que a API nova valida?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_MASTER_DATA_OWNED_BY_VENDAS
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Vendas/ERP é o dono»"
+    label: "DECISÃO: clientes, vendedores, filiais e catálogos pertencem ao Vendas/ERP; a carteira só mantém carteiras, vínculos e atribuições e lê os cadastros de lá"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Vendas/ERP é o dono»; descartadas: «Carteira continua dona» · «Híbrido» · «Pesquisar antes»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Clientes, vendedores, filiais e catálogos: quem é o dono desses cadastros no alvo?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_DB_OWN_POSTGRES
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Postgres próprio»"
+    label: "DECISÃO: a carteira usa um Postgres próprio (EF Core + Npgsql), sem migração de dados do SQLite atual, que é só demo"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Postgres próprio»; descartadas: «Schema no Postgres do Vendas» · «Há dados reais a migrar»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Qual banco o microsserviço da carteira usa?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_MASTER_DATA_LOCAL_REPLICA
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Réplica local sincronizada»"
+    label: "DECISÃO: os cadastros do Vendas/ERP chegam à carteira como réplica local somente-leitura sincronizada, para o motor de elegibilidade e disputa continuar em SQL local"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Réplica local sincronizada»; descartadas: «Consulta on-line à API Vendas» · «Pesquisar antes»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Como os cadastros do Vendas/ERP chegam à carteira?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_LINK_OUTBOX_KEPT
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Manter, consumidor futuro»"
+    label: "DECISÃO: a outbox de eventos de vínculo é mantida para consumidor futuro, com entrega segura no Postgres em vez do cursor por id"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Manter, consumidor futuro»; descartadas: «Vendas consome já» · «Remover a outbox»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Quem consome os eventos de vínculo (outbox /v1/link-events)?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_CSV_PORTFOLIOS_AND_LINKS_ONLY
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Só carteiras e vínculos»"
+    label: "DECISÃO: o CSV fica só com os layouts de carteiras e vínculos (simulação + confirmação) e as exportações; os layouts de cadastro saem. Job em BackgroundService, uma instância"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Só carteiras e vínculos»; descartadas: «Manter todos os layouts» · «Remover o CSV»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Com o cadastro no ERP, o que fica da importação/exportação CSV?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_DEPLOY_LIKE_VENDAS
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Igual ao Vendas»"
+    label: "DECISÃO: o microsserviço segue o deploy do Vendas: Azure DevOps (.ci/) + imagem no ECR, ambientes dev/homolog/prod, branches develop/main; orquestrador ainda a confirmar"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Igual ao Vendas»; descartadas: «Manter GitHub Actions» · «Pesquisar antes»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Onde e como o microsserviço .NET vai rodar?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_TESTS_BOILERPLATE_PATTERN
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Só o padrão do boilerplate»"
+    label: "DECISÃO: os testes do back novo seguem só o padrão do boilerplate (xUnit + Moq nos handlers, sem banco real); os ~570 casos do legado não são portados como suíte contra Postgres"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Só o padrão do boilerplate»; descartadas: «Portar como especificação» · «Meta de cobertura»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Como portar os ~570 testes atuais?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_KEEP_ETAG_CONCURRENCY
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Manter If-Match/ETag»"
+    label: "DECISÃO: o contrato novo adota o envelope Result<T> e o prefixo vendas/api/ e mantém a concorrência otimista por If-Match/ETag (428 sem versão, 409 version_conflict)"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Manter If-Match/ETag»; descartadas: «Versão no corpo» · «Sem concorrência otimista»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «A concorrência otimista (If-Match/ETag) continua no contrato novo?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_VISIBILITY_LEGACY_DENY_PROD
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «deny em produção»"
+    label: "DECISÃO: em produção, token sem perfil conhecido não tem leitura ampla (VISIBILITY_LEGACY=deny); allow só em dev/demo"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «deny em produção»; descartadas: «Remover o modo legado» · «allow em produção»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Token sem perfil conhecido: o modo legado fica como em produção?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_PHASE_BACK_FIRST
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Back primeiro»"
+    label: "DECISÃO: a migração começa pelo back (microsserviço .NET, réplica dos cadastros, contrato vendas/api/) e só depois vêm as telas no Vendas Front; não há convivência com o front legado"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Back primeiro»; descartadas: «Fatias verticais» · «Front e back em paralelo»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Em que ordem a migração acontece?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
+  - id: D_MAINTAINED_BY_GMILL_TEAM
+    node_type: decision
+    layer: audit
+    plane: DEV
+    status: done
+    impact: 3
+    confidence: 0.9
+    verified_at: "2026-10-14"
+    verified_against: "decisão do maestro em 2026-10-14, por pergunta com opções (/meta:decide): escolhida «Time GMill interno»"
+    label: "DECISÃO: o serviço é mantido pelo time interno da GMill (devs .NET/React); a documentação mira quem conhece o padrão GMill mas não o domínio da carteira"
+    narrative: "Selado por /meta:decide em 2026-10-14: escolhida «Time GMill interno»; descartadas: «Maestro + IA, depois GMill» · «A definir»."
+    provenance:
+      source: "maestro, na sessão do /meta:decide"
+      locator: "pergunta com opções de 2026-10-14: «Quem mantém e qual o tamanho do time?»"
+      method: "testemunho: decisão do maestro por pergunta com opções, 2026-10-14"
+      locality: "pessoa"
 
 edges:
   - from: THIS_REPO
@@ -130,3 +354,45 @@ edges:
     to: THIS_REPO
     edge_type: CONSTRAINS
     label: "Não derruba nada — LIMITA o que o Onion consegue fazer aqui. Sem domínio mapeado, o /warm-up e o /catch-up leem prosa, e cada sessão nova paga de novo o custo de entender o projeto."
+  - from: D_BACK_OWN_MICROSERVICE
+    to: Q_WHAT_IS_THIS_REPO_DOMAIN
+    edge_type: TRACES_TO
+  - from: D_FRONT_IN_VENDAS_FRONT
+    to: Q_WHAT_IS_THIS_REPO_DOMAIN
+    edge_type: TRACES_TO
+  - from: D_AUTH_VENDAS_TOKEN
+    to: Q_WHAT_IS_THIS_REPO_DOMAIN
+    edge_type: TRACES_TO
+  - from: D_MASTER_DATA_OWNED_BY_VENDAS
+    to: Q_WHAT_IS_THIS_REPO_DOMAIN
+    edge_type: TRACES_TO
+  - from: D_DB_OWN_POSTGRES
+    to: Q_WHAT_IS_THIS_REPO_DOMAIN
+    edge_type: TRACES_TO
+  - from: D_MASTER_DATA_LOCAL_REPLICA
+    to: D_MASTER_DATA_OWNED_BY_VENDAS
+    edge_type: TRACES_TO
+  - from: D_LINK_OUTBOX_KEPT
+    to: Q_WHAT_IS_THIS_REPO_DOMAIN
+    edge_type: TRACES_TO
+  - from: D_CSV_PORTFOLIOS_AND_LINKS_ONLY
+    to: D_MASTER_DATA_OWNED_BY_VENDAS
+    edge_type: TRACES_TO
+  - from: D_DEPLOY_LIKE_VENDAS
+    to: D_BACK_OWN_MICROSERVICE
+    edge_type: TRACES_TO
+  - from: D_TESTS_BOILERPLATE_PATTERN
+    to: D_BACK_OWN_MICROSERVICE
+    edge_type: TRACES_TO
+  - from: D_KEEP_ETAG_CONCURRENCY
+    to: D_FRONT_IN_VENDAS_FRONT
+    edge_type: TRACES_TO
+  - from: D_VISIBILITY_LEGACY_DENY_PROD
+    to: D_AUTH_VENDAS_TOKEN
+    edge_type: TRACES_TO
+  - from: D_PHASE_BACK_FIRST
+    to: D_BACK_OWN_MICROSERVICE
+    edge_type: TRACES_TO
+  - from: D_MAINTAINED_BY_GMILL_TEAM
+    to: Q_WHAT_IS_THIS_REPO_DOMAIN
+    edge_type: TRACES_TO
