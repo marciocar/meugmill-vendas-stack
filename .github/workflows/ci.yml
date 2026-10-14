@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, tipos, testes e build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # A versão do pnpm vem do campo packageManager do package.json.
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+
+  docker:
+    name: Imagens e smoke da stack
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+      # O seed da demo (scripts/demo/seed.mjs) roda no Node do projeto, não no da imagem do runner.
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: docker compose build
+      - run: docker compose up -d
+      - run: bash scripts/smoke.sh
+      - name: Demo da GMill (carga e 2ª execução sem mudança)
+        run: node scripts/demo/seed.mjs && node scripts/demo/seed.mjs --expect-unchanged
+      - name: Logs da stack (falha)
+        if: failure()
+        run: docker compose logs
+      - name: Derrubar a stack
+        if: always()
+        run: docker compose down -v

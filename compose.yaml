@@ -1,0 +1,96 @@
+# Stack local do MeuGmill Vendas / Carteira de Clientes: api + web + idp (IdP de mentira).
+# Este arquivo documenta as variáveis: todas têm default via ${VAR:-default}.
+# Para sobrescrever, exporte a variável no shell antes do `docker compose up`.
+# O idp é SÓ para desenvolvimento/CI; em produção a API aponta para o IdP real.
+
+name: carteira
+
+services:
+  idp:
+    # Servidor OAuth2/OIDC de mentira. Fixe a versão: nada de :latest.
+    image: ghcr.io/navikt/mock-oauth2-server:3.0.1
+    # Sem healthcheck de propósito: a imagem é distroless (sem shell/curl/wget, não verificado aqui),
+    # então não há como sondar por dentro. Quem espera o IdP é o scripts/smoke.sh (discovery 200).
+    ports:
+      # Porta do IdP no host. O issuer exposto ao navegador é http://localhost:8080/default.
+      # Só em 127.0.0.1: nada fica exposto na rede; acesso remoto por túnel SSH (-L porta:localhost:porta).
+      - "${BIND_ADDR:-127.0.0.1}:${IDP_PORT:-39080}:8080"
+    environment:
+      # Arquivo de configuração: tokens do issuer "default" com aud/roles/branch_ids da carteira.
+      # Perfis de teste (requestMappings: vale o PRIMEIRO que casar, na ordem do arquivo):
+      #   client_id=smoke-admin -> sub admin-01, roles ["admin"], branch_ids ["filial-01"]
+      #   client_id=smoke-vendedor -> sub vend-01, roles ["vendedor"], branch_ids ["filial-01"]
+      #   client_id=smoke-gestor -> sub gest-01, roles ["gestor"], branch_ids ["filial-01"]
+      #   client_id=smoke-supervisao -> sub sup-01, roles ["supervisao"], branch_ids ["filial-01"]
+      #   qualquer outro client_id -> sub vendedor-01, roles ["vendedor"], branch_ids ["filial-01"]
+      # O mock lê este arquivo só ao subir: depois de mudar os mapeamentos, recrie o idp
+      # (docker compose up -d --force-recreate idp).
+      # Pede-se o token de admin com: -d client_id=smoke-admin. O mock NÃO aceita `scope` como
+      # requestParam (removido desde a v0.3.x por causa do nimbus), por isso o seletor é o client_id.
+      # Fonte: README do navikt/mock-oauth2-server (seção "Token callbacks") e OAuth2TokenCallback.kt.
+      JSON_CONFIG_PATH: /config/idp-config.json
+    volumes:
+      - ./docker/idp-config.json:/config/idp-config.json:ro
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    image: carteira-api:local
+    # ATENÇÃO: manter UMA réplica só. SQLite tem um único escritor; não use `deploy.replicas`
+    # nem `--scale api=N` com o mesmo volume.
+    depends_on:
+      - idp
+    ports:
+      # Porta da API no host (dentro do container é sempre PORT=3000).
+      # Só em 127.0.0.1: nada fica exposto na rede; acesso remoto por túnel SSH (-L porta:localhost:porta).
+      - "${BIND_ADDR:-127.0.0.1}:${API_PORT:-39000}:3000"
+    volumes:
+      # Banco SQLite persistente.
+      - carteira-data:/data
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOST: 0.0.0.0
+      # Nível de log do Fastify/pino: fatal|error|warn|info|debug|trace.
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      DATABASE_PATH: /data/carteira.sqlite
+      # Issuer esperado no claim "iss". O mock monta o iss a partir do Host da requisição, e os
+      # tokens são pedidos pelo host em localhost:8080, então o iss é este valor.
+      OIDC_ISSUER: ${OIDC_ISSUER:-http://localhost:39080/default}
+      # Audiência esperada no claim "aud" (o idp já emite aud=carteira-api).
+      OIDC_AUDIENCE: ${OIDC_AUDIENCE:-carteira-api}
+      # JWKS buscado pela rede interna do Compose (dentro do container, localhost não é o idp).
+      # Vazio em produção = usar discovery do issuer.
+      OIDC_JWKS_URI: ${OIDC_JWKS_URI:-http://idp:8080/default/jwks}
+      # Algoritmos de assinatura aceitos, separados por vírgula.
+      OIDC_ALGORITHMS: ${OIDC_ALGORITHMS:-RS256,ES256}
+      # Nome do claim com os papéis do usuário.
+      OIDC_CLAIM_ROLES: ${OIDC_CLAIM_ROLES:-roles}
+      # Nome do claim com as filiais do usuário.
+      OIDC_CLAIM_BRANCHES: ${OIDC_CLAIM_BRANCHES:-branch_ids}
+      # Tolerância de relógio (segundos) na validação de exp/nbf.
+      OIDC_CLOCK_TOLERANCE_SECONDS: ${OIDC_CLOCK_TOLERANCE_SECONDS:-30}
+      # Só para o IdP de teste em http; produção exige https.
+      OIDC_ALLOW_INSECURE_HTTP: "true"
+      # Origens autorizadas a chamar a API pelo navegador (lista separada por vírgula).
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:39081}
+      # Token sem nenhum perfil de visibilidade conhecido: allow (lê a filial, padrão) | deny (não lê nada amplo).
+      # O valor de produção deve ser decidido pelo negócio.
+      # VISIBILITY_LEGACY: ${VISIBILITY_LEGACY:-allow}
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+    image: carteira-web:local
+    ports:
+      # Porta do web component + demo no host (nginx escuta 8080 dentro do container).
+      # Só em 127.0.0.1: nada fica exposto na rede; acesso remoto por túnel SSH (-L porta:localhost:porta).
+      - "${BIND_ADDR:-127.0.0.1}:${WEB_PORT:-39081}:8080"
+    restart: unless-stopped
+
+volumes:
+  # Dados do SQLite. `docker compose down -v` apaga o banco.
+  carteira-data:

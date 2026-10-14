@@ -1,0 +1,97 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1791398548152,
+      "tag": "0000_fearless_sunfire",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1791418829912,
+      "tag": "0001_e2_master_data",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1791418833529,
+      "tag": "0002_seed_ibge",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1791423744835,
+      "tag": "0003_e2_link_state_search_keys",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1791427799534,
+      "tag": "0004_e3_portfolios",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1791431494791,
+      "tag": "0005_e4_overrides",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1791435622262,
+      "tag": "0006_e5_customers_state_idx",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1791457051043,
+      "tag": "0007_e6_assignments",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1791458258564,
+      "tag": "0008_e6_assignments_fk_idx",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1791459738267,
+      "tag": "0009_e7_links",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1791461117770,
+      "tag": "0010_e7_links_indexes",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1791463585490,
+      "tag": "0011_e8_seller_user_sub",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1791470811302,
+      "tag": "0012_e10_import_jobs",
+      "breakpoints": true
+    }
+  ]
+}
