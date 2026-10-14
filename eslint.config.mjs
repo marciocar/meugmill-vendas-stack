@@ -10,6 +10,8 @@ export default tseslint.config(
       '**/coverage/**',
       '**/migrations/**',
       'docs/**',
+      // Framework Onion (scripts de validação/workflows com globais do próprio runtime) — não é código do produto.
+      '.claude/**',
     ],
   },
   js.configs.recommended,

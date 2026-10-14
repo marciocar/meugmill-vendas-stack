@@ -1,0 +1,3 @@
+# Catraca de DEFASAGEM DE PORTA (door-staleness-baseline.txt) — emitida por
+#   bash .claude/validation/door-staleness-check.sh --emit-baseline
+# SEM OBJETO neste repo: não há docs/evolution/federation/members.yaml, logo não há porta a julgar.

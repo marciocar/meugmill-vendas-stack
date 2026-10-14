@@ -1,0 +1,7 @@
+framework: onion-core
+source_commit: 6bf0be2f4b39
+source_commit_date: 2026-10-14
+role: adopted
+adopted_from: https://github.com/marciocar/onion-core.git
+adopted_at: 2026-10-14
+mode: greenfield
